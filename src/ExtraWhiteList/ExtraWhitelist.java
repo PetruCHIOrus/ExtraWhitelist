@@ -23,7 +23,7 @@ public class ExtraWhitelist extends Plugin{
         Events.on(EventType.PlayerJoin.class, event -> {
             List<String> Members;
             Player newPlayer = event.player;
-            Path path = Paths.get(config.PlayerlistDir);
+            Path path = Paths.get(config.PlayerlistPath);
             try {
                 if(!Files.exists(path)){
                     Files.createFile(path);
@@ -90,18 +90,63 @@ public class ExtraWhitelist extends Plugin{
             target.team(newTeam);
             Log.info("Team "+ teamInput+ " successfully assigned to player UUID "+ uuid + " from "+ oldTeam + " team.");
         });
-        handler.register("listmode", "[0,1,2]", "Set list mode: 1 - white, 2 - black, 0 - off.", args -> {
-            if(args.length == 0){
-                Log.info("Current mode: " + config.listMode);
+        handler.register("ewlconf", "[option] [value]", "Manage and configure ExtraWhitelist mode", args -> {
+            if(args.length == 0) {
+                System.out.println("=== ACTIVE MOD CONFIGURATION ===");
+                System.out.println("listmode:       " + config.listMode);
+                System.out.println("playerlistpath: " + config.PlayerlistPath);
+                System.out.println("================================");
+                System.out.println();
+                System.out.println("Extra features >>");
+                System.out.println();
+                System.out.println("save - forcibly saves config;");
+                System.out.println("load - reload config file from config/extrawhitelist.json;");
                 return;
             }
-            try {
-                if(Integer.parseInt(args[0]) > 2){
-                    Log.info("List mode is not changed: invalid mode. Valid modes: 0, 1, 2. Check Wiki for more details.");
+            switch (args[0]){
+                case "listmode" -> {
+                    if(args.length == 1){
+                        Log.info("Actual listmode: "+ config.listMode);
+                        return;
+                    }
+                    try {
+                        if(Integer.parseInt(args[1])> 2){
+                            Log.info("This mode doesn't exists. Use 0, 1, or 2 mode.");
+                            return;
+                        }
+                        config.listMode = Integer.parseInt(args[1]);
+                        config.save();
+                        Log.info("Listmode in mode "+ args[1] + " now, setting successfully saved.");
+                    } catch (NumberFormatException e) {
+                        Log.err("Mode is not changed: invalid syntax. " + e);
+                    }
                 }
-                config.listMode = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e) {
-                Log.err("Mode is not changed: invalid syntax. " + e);
+
+                case "playerlistpath" -> {
+                    if(args.length == 1){
+                        Log.info("Actual path: "+ config.PlayerlistPath);
+                        return;
+                    }
+
+                    try {
+                        config.PlayerlistPath = args[1];
+                        config.save();
+                        Log.info("Playerlist path is "+ args[1] + " now, setting successfully saved.");
+                    } catch (NumberFormatException e) {
+                        Log.err("Playerlist path is not changed: invalid syntax. " + e);
+                    }
+                }
+                case "reload" -> {
+                    config.load();
+                    Log.info("Config reloaded. Write 'ewlconf' if you wanna check it.");
+                }
+                case "save" -> {
+                    config.save();
+                    Log.info("Сonfig was saved forcibly.");
+                }
+                default -> {
+                    Log.info("Can't found that command. Nothing happen.");
+                }
             }
         });
     }

@@ -8,16 +8,17 @@ import mindustry.Vars;
 public class pluginConfig {
     public int listMode = 0;
     private static final String configFileName = "extrawhitelist.json";
-    private static final Fi configDir = Vars.dataDirectory.child("config");
+    private static final Fi configDir = Vars.dataDirectory;
     private static final Fi configFile = configDir.child(configFileName);
-    public String PlayerlistDir = "config/playerlist.txt";
+    public String PlayerlistPath = "config/playerlist.txt";
+
     public void load() {
         if(configFile.exists()){
             try {
                 Json json = new Json();
                 pluginConfig loaded = json.fromJson(pluginConfig.class, configFile.readString());
                 this.listMode = loaded.listMode;
-                this.PlayerlistDir = loaded.PlayerlistDir;
+                this.PlayerlistPath = loaded.PlayerlistPath;
             } catch (Exception e){
                 Log.err("Can't load extrawhitelist.json: " + e);
             }
