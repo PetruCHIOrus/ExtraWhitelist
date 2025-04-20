@@ -1,0 +1,8 @@
+{
+  "name": "Extra Whitelist",
+  "author": "PetruCHIOrus",
+  "main": "ExtraWhiteList.ExtraWhitelist",
+  "description": "A plugin to configure player rights",
+  "java": true,
+  "version": 1.0
+}
