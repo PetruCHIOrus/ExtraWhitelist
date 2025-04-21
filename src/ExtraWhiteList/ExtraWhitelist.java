@@ -95,7 +95,7 @@ public class ExtraWhitelist extends Plugin{
 
             String oldTeam = target.team().name;
             target.team(newTeam);
-            Log.info("Team "+ teamInput+ " successfully assigned to player UUID "+ uuid + " from "+ oldTeam + " team.");
+            Log.info("Team "+ teamInput+ " successfully assigned to player "+ uuid + " from "+ oldTeam + " team.");
         });
         handler.register("ewlconf", "[option] [value]", "Manage and configure ExtraWhitelist mode", args -> {
             if(args.length == 0) {
