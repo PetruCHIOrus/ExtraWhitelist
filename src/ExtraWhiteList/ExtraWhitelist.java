@@ -75,9 +75,9 @@ public class ExtraWhitelist extends Plugin{
     }
     @Override
     public void registerServerCommands(CommandHandler handler){
-        handler.register("team", "<uuid> <team>","Changes team for player.", args -> {
+        handler.register("team", "<uuid/name> <team>","Changes team for player.", args -> {
             if(args.length < 2){
-                Log.info("Invalid syntax. Usage: /team UUID team");
+                Log.info("Invalid syntax. Usage: /team UUID/name team");
                 return;
             }
             String uuid = args[0];
