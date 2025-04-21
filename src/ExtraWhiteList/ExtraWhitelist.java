@@ -48,7 +48,7 @@ public class ExtraWhitelist extends Plugin{
                 case 0 -> {
                 }
                 case 1 -> {
-                    if(!Members.contains(newPlayer.uuid())|!Members.contains(newPlayer.name)){
+                    if(!Members.contains(newPlayer.uuid())&!Members.contains(newPlayer.name)){
                         newPlayer.team(Team.derelict);
                     }
                 }
