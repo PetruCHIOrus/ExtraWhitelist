@@ -7,6 +7,7 @@ import mindustry.game.EventType;
 import mindustry.game.Team;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
+
 import mindustry.mod.Plugin;
 
 import java.io.IOException;
@@ -16,6 +17,17 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class ExtraWhitelist extends Plugin{
+    private Player findPlayer(String Query) {
+        for (Player Variant : Groups.player) {
+            if(Variant.name.equals(Query)){
+                return Variant;
+            }
+            if(Variant.uuid().equals(Query)){
+                return Variant;
+            }
+        }
+        return null;
+    }
     pluginConfig config = new pluginConfig();
     @Override
     public void init(){
@@ -36,16 +48,16 @@ public class ExtraWhitelist extends Plugin{
                 case 0 -> {
                 }
                 case 1 -> {
-                    if(!Members.contains(newPlayer.uuid())){
+                    if(!Members.contains(newPlayer.uuid())|!Members.contains(newPlayer.name)){
                         newPlayer.team(Team.derelict);
                     }
                 }
                 case 2 -> {
-                    if(Members.contains(newPlayer.uuid())){
+                    if(Members.contains(newPlayer.uuid())|Members.contains(newPlayer.name)){
                         newPlayer.team(Team.derelict);
                     }
                 }
-                default -> Log.err("Can't determine action with new player. List ignored.");
+                default -> Log.err("Can't determine action with new player. List ignored. Check config file.");
             }
         });
     }
@@ -54,6 +66,7 @@ public class ExtraWhitelist extends Plugin{
             case "blue" -> Team.blue.id;
             case "crux" -> Team.crux.id;
             case "green" -> Team.green.id;
+            case "derelict" -> Team.derelict.id;
             case "malis" -> Team.malis.id;
             case "neoplastic" -> Team.neoplastic.id;
             case "sharded" -> Team.sharded.id;
@@ -69,15 +82,9 @@ public class ExtraWhitelist extends Plugin{
             }
             String uuid = args[0];
             String teamInput = args[1];
-            Player target = null;
-            for(Player p : Groups.player){
-                if(p.uuid().equals(uuid)){
-                    target = p;
-                    break;
-                }
-            }
+            Player target = findPlayer(uuid);
             if(target == null){
-                Log.info("Player with UUID "+uuid+" not found or offline for now.");
+                Log.info("Player with UUID or name "+uuid+" not found or offline for now.");
                 return;
             }
             int teamIndex = getTeamIndexByName(teamInput);
@@ -144,9 +151,7 @@ public class ExtraWhitelist extends Plugin{
                     config.save();
                     Log.info("Сonfig was saved forcibly.");
                 }
-                default -> {
-                    Log.info("Can't found that command. Nothing happen.");
-                }
+                default -> Log.info("Can't found that command. Nothing happen.");
             }
         });
     }

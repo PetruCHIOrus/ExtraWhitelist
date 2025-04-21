@@ -2,7 +2,7 @@
   "name": "Extra Whitelist",
   "author": "PetruCHIOrus",
   "main": "ExtraWhiteList.ExtraWhitelist",
-  "description": "A plugin to configure player rights",
+  "description": "Plugin for configuring commands and access",
   "java": true,
-  "version": 1.0
+  "version": 0.2
 }
